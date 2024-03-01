@@ -57,4 +57,23 @@ const loginUser = async (req, res) => {
     }
 }
 
-module.exports = { signupUser, loginUser }
+const getUser = async (req, res) => {
+    console.log(req.userId, 'from getSingleUser 61');
+    try {
+        const singleUser = await User.findById(req.userId)
+            .populate('images')
+
+        if (!singleUser) {
+            return res.status(500).json({ error: 'No user found by this id', msg: error.message });
+        }
+        res.status(200).json({
+            success: true,
+            data: singleUser
+        })
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ error: 'Internal Server Error', msg: error.message });
+    }
+}
+
+module.exports = { signupUser, loginUser, getUser }

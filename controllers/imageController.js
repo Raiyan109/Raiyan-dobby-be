@@ -25,7 +25,9 @@ const createImage = async (req, res) => {
             user: req.userId
         });
 
-        console.log(image);
+        await User.findByIdAndUpdate(req.userId, {
+            $push: { images: image._id },
+        });
 
         return res.status(200).json({ image })
     } catch (error) {
@@ -51,4 +53,38 @@ const getImages = async (req, res) => {
     }
 }
 
-module.exports = { createImage, getImages }
+const getSingleImage = async (req, res) => {
+    try {
+        const image = await Image.findOne({ name: "image 1" }).populate('user')
+
+        res.status(200).json({
+            success: true,
+            data: image
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
+const getUser = async (req, res) => {
+    console.log(req.userId, 'from getSingleUser 61');
+    try {
+        const singleUser = await User.findById(req.userId)
+            .populate('images')
+
+        if (!singleUser) {
+            return res.status(500).json({ error: 'No user found by this id', msg: error.message });
+        }
+        res.status(200).json({
+            success: true,
+            data: singleUser
+        })
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ error: 'Internal Server Error', msg: error.message });
+    }
+}
+
+module.exports = { createImage, getImages, getSingleImage, getUser }

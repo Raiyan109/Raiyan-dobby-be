@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireSignIn } = require('../middleware/authMiddleware');
-const { createImage, getImages } = require('../controllers/imageController');
+const { createImage, getImages, getSingleImage, getUser } = require('../controllers/imageController');
 
 const router = express.Router()
 
@@ -26,5 +26,7 @@ const upload = multer({
 router.post('/create', requireSignIn, upload.single('photo'), createImage)
 
 router.get('/', getImages)
+router.get('/single', getSingleImage)
+router.get('/singleUser', requireSignIn, getUser)
 
 module.exports = router

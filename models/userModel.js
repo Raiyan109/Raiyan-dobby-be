@@ -14,7 +14,13 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: [true, 'User Password is Required']
-    }
+    },
+    images: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'Image',
+        }
+    ]
 })
 
 
