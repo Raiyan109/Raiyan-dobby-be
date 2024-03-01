@@ -25,6 +25,7 @@ const createImage = async (req, res) => {
             user: req.userId
         });
 
+        // Now, find the user and update their images array
         await User.findByIdAndUpdate(req.userId, {
             $push: { images: image._id },
         });
